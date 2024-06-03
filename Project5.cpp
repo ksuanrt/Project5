@@ -1,4 +1,4 @@
-﻿//2-1
+﻿//2-1 Dynamic Queueing
 //#include <iostream>
 //#include <queue>
 //#include <list>
@@ -351,7 +351,7 @@
 //
 //    return 0;
 //}
-// 2-3  
+// 2-3 CLI
 //#include <iostream>
 //#include <fstream>
 //#include <sstream>
