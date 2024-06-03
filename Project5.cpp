@@ -351,3 +351,95 @@
 //
 //    return 0;
 //}
+// 2-3  
+//#include <iostream>
+//#include <fstream>
+//#include <sstream>
+//#include <thread>
+//#include <mutex>
+//#include <condition_variable>
+//#include <vector>
+//#include <queue>
+//#include <functional>
+//#include <chrono>
+//#include <atomic>
+//
+//using namespace std;
+//
+//mutex coutMutex;
+//condition_variable cv;
+//atomic<bool> isRunning(true);
+//
+//class Process {
+//public:
+//    string command;
+//    bool isForeground;
+//    int period;
+//    int duration;
+//
+//    Process(string cmd, bool fg, int per, int dur)
+//        : command(cmd), isForeground(fg), period(per), duration(dur) {}
+//
+//    void execute() {
+//        lock_guard<mutex> lock(coutMutex);
+//        cout << command.substr(5) << endl; // 실행 로직, 여기서는 간단히 echo만 처리
+//    }
+//};
+//
+//void worker(queue<shared_ptr<Process>>& workQueue) {
+//    while (isRunning && !workQueue.empty()) {
+//        auto process = workQueue.front();
+//        workQueue.pop();
+//        if (process) {
+//            process->execute();
+//            this_thread::sleep_for(chrono::seconds(process->period)); // 주어진 주기만큼 대기
+//        }
+//    }
+//}
+//
+//void parseAndExecute(const string& commandLine) {
+//    istringstream stream(commandLine);
+//    string command, segment;
+//    queue<shared_ptr<Process>> workQueue;
+//
+//    while (getline(stream, segment, ';')) {
+//        bool isForeground = segment.find('&') == string::npos;
+//        string cmd = isForeground ? segment : segment.substr(1); // '&' 제거
+//        int period = 1; // 기본 주기
+//        int duration = 50; // 기본 지속 시간
+//        auto process = make_shared<Process>(cmd, isForeground, period, duration);
+//        workQueue.push(process);
+//    }
+//
+//    thread th([&workQueue] {
+//        while (!workQueue.empty()) {
+//            auto process = workQueue.front();
+//            workQueue.pop();
+//            if (process && process->isForeground) {
+//                process->execute();
+//                this_thread::sleep_for(chrono::seconds(process->period));
+//            }
+//            else {
+//                // 배경 작업 실행
+//                thread bgThread(&Process::execute, process);
+//                bgThread.detach();
+//            }
+//        }
+//        });
+//    th.join();
+//}
+//
+//int main() {
+//    string commandLine;
+//    while (true) {
+//        cout << "prompt> ";
+//        getline(cin, commandLine);
+//        if (commandLine == "exit") {
+//            isRunning = false;
+//            cv.notify_all();
+//            break;
+//        }
+//        parseAndExecute(commandLine);
+//    }
+//    return 0;
+//}
